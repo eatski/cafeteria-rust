@@ -2,5 +2,5 @@
 Simple Yew Component Runner.
 
 # Sample Code
-https://github.com/itskihaga/exprocess-rust/blob/main/packages/showcase/src/main.rs
+[code](https://github.com/itskihaga/exprocess-rust-sample/releases/tag/cafeteria-sample)
 
