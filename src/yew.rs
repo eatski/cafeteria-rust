@@ -52,7 +52,7 @@ impl <C: GalleryConfig + 'static>Component for Gallery<C> {
         html! {
             <div class="cafeteria-root">
                 <section>
-                    <h2>{self.current.join("/")}</h2>
+                    <h2>{if self.current.len() == 0 { "Cafeteria".to_owned() } else { self.current.join("/") }}</h2>
                     {self.render_tree(self.link.callback(|v| v))}
                 </section>
                 {current.map(|current| { html! { <section>{current}</section> } }).unwrap_or_default()}
