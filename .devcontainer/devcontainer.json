@@ -1,0 +1,17 @@
+{
+    "name": "rust",
+    "dockerComposeFile": [
+        "./docker-compose.yml",
+    ],
+    "service": "rust-dev",
+    "workspaceFolder": "/app",
+    "settings": {
+        "rust.target_dir": "/app/target"
+    },
+    // "forwardPorts": [9000],
+    "extensions": [
+        "rust-lang.rust",
+        "matklad.rust-analyzer",
+        // "vadimcn.vscode-lldb" debugger
+    ]
+}
