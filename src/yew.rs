@@ -51,7 +51,7 @@ impl <C: GalleryConfig + 'static>Component for Gallery<C> {
         let current = self.model.get(self.current.iter().cloned());
         html! {
             <div class="cafeteria-root">
-                <section>
+                <section class="cafeteria-nav">
                     <h2>{if self.current.len() == 0 { "Cafeteria".to_owned() } else { self.current.join("/") }}</h2>
                     {self.render_tree(self.link.callback(|v| v))}
                 </section>
