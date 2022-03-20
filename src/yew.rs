@@ -1,6 +1,6 @@
 use std::{marker::PhantomData};
 
-use yew::{html, Callback, Html, Component, ComponentLink};
+use yew::{html, Callback, Html, Component, Context};
 
 use crate::tree::{
     Directory as DirectoryCore, Gallery as GalleryCore, Picture as PictureCore, PictureTree,
@@ -21,7 +21,6 @@ pub struct Gallery<C: GalleryConfig + 'static> {
     __marker: PhantomData<C>,
     current: PicturePath,
     model: GalleryModel,
-    link: ComponentLink<Self>
 }
 
 impl <C: GalleryConfig + 'static>Component for Gallery<C> {
@@ -29,31 +28,26 @@ impl <C: GalleryConfig + 'static>Component for Gallery<C> {
 
     type Properties = ();
 
-    fn create(_props: Self::Properties, link: yew::ComponentLink<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
             __marker: PhantomData,
             current: Vec::new(),
             model: C::model(),
-            link
         }
     }
 
-    fn update(&mut self, msg: Self::Message) -> yew::ShouldRender {
+    fn update(&mut self,_ctx: &Context<Self>, msg: Self::Message) -> bool {
         self.current = msg;
         true
     }
-
-    fn change(&mut self, _props: Self::Properties) -> yew::ShouldRender {
-        panic!()
-    }
-
-    fn view(&self) -> Html {
+    
+    fn view(&self,ctx: &Context<Self>) -> Html {
         let current = self.model.get(self.current.iter().cloned());
         html! {
             <div class="cafeteria-root">
                 <section class="cafeteria-nav">
                     <h2>{if self.current.len() == 0 { "Cafeteria".to_owned() } else { self.current.join("/") }}</h2>
-                    {self.render_tree(self.link.callback(|v| v))}
+                    {self.render_tree(ctx.link().callback(|v| v))}
                 </section>
                 {current.map(|current| { html! { <section>{current}</section> } }).unwrap_or_default()}
             </div>
@@ -81,7 +75,7 @@ impl <C: GalleryConfig + 'static>Gallery<C> {
                 PictureTree::Picture(_) => {
                     let path_cloned = path.clone();
                     let callback = callback.reform(move |_| path_cloned.clone());
-                    if path.eq(&self.current) { html! {<strong>{key}</strong>} } else { html! {<a onclick=callback>{key}</a>} }
+                    if path.eq(&self.current) { html! {<strong>{key}</strong>} } else { html! {<a onclick={callback}>{key}</a>} }
                 }
                 PictureTree::Dir(dir) => self.tree_dir_with_name(key.as_str(), dir, callback.clone(),path.clone()),
             };
